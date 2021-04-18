@@ -46,14 +46,27 @@
       const geometry = new THREE.BoxGeometry(3, 3, 3);
       const material = new THREE.MeshLambertMaterial({ color: 0xb705e8 });
       const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.x = 2;
+      const circle = new THREE.SphereGeometry(2, 2, 2);
+      const matC = new THREE.MeshBasicMaterial({
+        color: 0xf3a2b0,
+        wireframe: true,
+      });
 
+      const second = new THREE.Mesh(circle, matC);
+      mesh.position.x = -5;
+      mesh.rotation.y = 1.2;
+      mesh.rotation.x = 2.1;
+      second.position.x = 5;
+
+      scene.add(second);
       scene.add(mesh);
       const light = new THREE.PointLight(0xffffff, 1, 500);
       light.position.set(10, 0, 25);
       scene.add(light);
       var render = function () {
         requestAnimationFrame(render);
+        second.rotation.x += 0.01;
+        second.rotation.y += 0.01;
         renderer.render(scene, camera);
       };
       render();
@@ -61,13 +74,13 @@
       this.tl = new TimelineMax({ paused: true });
       this.tl.to(mesh.scale, 1, { x: 2, ease: Expo.easeOut });
       this.tl.to(mesh.scale, 0.5, { x: 0.5, ease: Expo.easeOut });
-      this.tl.to(mesh.position, 0.5, { x: 2, ease: Expo.easeOut });
-      this.tl.to(
-        mesh.rotation,
-        2,
-        { y: Math.PI * 2, ease: Expo.easeOut },
-        "=-1.5"
-      );
+      this.tl.to(mesh.scale, 0.4, { x: 1, ease: Expo.easeOut });
+
+      this.tl.to(mesh.rotation, 10, {
+        y: Math.PI * 9.5,
+        x: Math.PI * 9.5,
+      });
+      this.tl.to(mesh.rotation, 5, { x: 1, y: 1, ease: Expo.easeOut });
 
       document.body.addEventListener("click", () => {
         this.tl.play();
